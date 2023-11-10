@@ -113,10 +113,11 @@ export default function Home() {
           marker: { size: 12, colors: colors },
         },
       ],
+      layout: { title: "Embeddings Visualizer" },
     });
 
     // On click, scroll to the item in the list and highlight it.
-    myPlot.on("plotly_click", function (d) {
+    myPlot.on("plotly_click", (d) => {
       const i = d.points[0].pointNumber,
         item = ulRef.current.children[i];
 
@@ -128,15 +129,29 @@ export default function Home() {
       }, 1000);
     });
 
-    myPlot.on("plotly_afterplot", function (data) {
+    myPlot.on("plotly_afterplot", (d) => {
       console.log("done plotting", data);
     });
+
+    myPlot
+      .on("plotly_hover", (d) => {
+        const p = d.points[0];
+        const infoText = [p.x, p.y, DATA[p.x].text].join(", ");
+
+        document.getElementById("hover_info").innerHTML = `<p>${infoText}</p>`;
+      })
+      .on("plotly_unhover", () => {
+        document.getElementById("hover_info").innerHTML = "";
+      });
   }, [data]);
 
   return (
     <main className="grid h-screen grid-cols-10">
       <FlyOut flyOutOpen={flyOutOpen} setFlyOutOpen={setFlyOutOpen} />
-      <div id="plotly" className="col-span-7"></div>
+      <div className="col-span-7">
+        <div id="plotly" className="h-[95%]"></div>
+        <div id="hover_info"></div>
+      </div>
       <div className="h-screen col-span-3 px-4 overflow-y-scroll bg-white">
         <div className="flex items-center pt-6 align-middle">
           <h1 className="text-xl font-bold">Data</h1>&nbsp;-&nbsp;
