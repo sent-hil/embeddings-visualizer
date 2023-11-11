@@ -103,6 +103,7 @@ export default function Home() {
     }
 
     const myPlot = document.getElementById("plotly");
+
     Plotly.newPlot(myPlot, {
       data: [
         {
@@ -121,6 +122,10 @@ export default function Home() {
       const i = d.points[0].pointNumber,
         item = ulRef.current.children[i];
 
+      if (item === undefined) {
+        return;
+      }
+
       item.scrollIntoView({ behavior: "instant" });
       item.classList.add("bg-blue-100");
 
@@ -129,21 +134,28 @@ export default function Home() {
       }, 1000);
     });
 
-    myPlot.on("plotly_afterplot", (d) => {
-      console.log("done plotting", data);
+    // Update the list when the chart is zoomed.
+    myPlot.on("plotly_relayout", (d) => {
+      if (d["xaxis.range[0]"] === undefined) {
+        setData(DATA);
+      } else {
+        setData(DATA.slice(d["xaxis.range[0]"], d["xaxis.range[1]"]));
+      }
     });
 
-    myPlot
-      .on("plotly_hover", (d) => {
-        const p = d.points[0];
-        const infoText = [p.x, p.y, DATA[p.x].text].join(", ");
+    // Show point under hover.
+    myPlot.on("plotly_hover", (d) => {
+      const p = d.points[0];
+      const infoText = [p.x, p.y, DATA[p.x].text].join(", ");
 
-        document.getElementById("hover_info").innerHTML = `<p>${infoText}</p>`;
-      })
-      .on("plotly_unhover", () => {
-        document.getElementById("hover_info").innerHTML = "";
-      });
-  }, [data]);
+      document.getElementById("hover_info").innerHTML = `<p>${infoText}</p>`;
+    });
+
+    // Remove hover info once the mouse leaves the plot.
+    myPlot.on("plotly_unhover", () => {
+      document.getElementById("hover_info").innerHTML = "";
+    });
+  }, []);
 
   return (
     <main className="grid h-screen grid-cols-10">
