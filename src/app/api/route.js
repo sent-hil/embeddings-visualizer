@@ -4,6 +4,6 @@ const DATA = Array.from(Array(100)).map((_, i) => ({
   y: i * 2,
 }));
 
-export async function GET(request) {
+export async function POST(request) {
   return Response.json(DATA);
 }
