@@ -120,9 +120,9 @@ export default function Home() {
     // On click, scroll to the item in the list and highlight it.
     myPlot.on("plotly_click", (d) => {
       const i = d.points[0].pointNumber,
-        item = ulRef.current.children[i];
+        item = ulRef.current.children.namedItem(i.toString());
 
-      if (item === undefined) {
+      if (!item) {
         return;
       }
 
@@ -139,7 +139,12 @@ export default function Home() {
       if (d["xaxis.range[0]"] === undefined) {
         setData(DATA);
       } else {
-        setData(DATA.slice(d["xaxis.range[0]"], d["xaxis.range[1]"]));
+        // Show only data points that are within the zoomed range.
+        const x1 = Math.ceil(d["xaxis.range[0]"]);
+        const x2 = Math.ceil(d["xaxis.range[1]"]);
+        const y2 = d["yaxis.range[1]"];
+
+        setData(DATA.slice(x1, x2).filter((d) => d.y <= y2));
       }
     });
 
@@ -175,10 +180,11 @@ export default function Home() {
           </button>
         </div>
         <ul className="pt-2 mb-10" ref={ulRef}>
-          {data.map((d, i) => (
+          {data.map((d) => (
             <li
               className="flex pt-1 overflow-auto transition-colors rounded-lg whitespace-nowrap"
-              key={i}
+              name={d.x}
+              key={d.x}
             >
               [{d.x}, {d.y}] - {d.text}
             </li>
