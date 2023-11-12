@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import Script from "next/script";
 import FlyOut from "./flyout";
 import { setupPlotly } from "./chart";
