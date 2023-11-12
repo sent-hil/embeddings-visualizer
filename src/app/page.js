@@ -8,14 +8,22 @@ import { setupPlotly } from "./chart";
 export default function Home() {
   const [data, setData] = useState([]);
   const [flyOutOpen, setFlyOutOpen] = useState(true);
+
   const [input, setInput] = useState("");
+  const [model, setModel] = useState("");
 
   const onFormSubmit = (e) => {
     e.preventDefault();
 
-    fetch("/api", { method: "POST", body: JSON.stringify({ input: input }) })
+    fetch("/api", {
+      method: "POST",
+      body: JSON.stringify({ input: input, model: model }),
+    })
       .then((res) => res.json())
       .then((data) => {
+        if (data["error"]) {
+          return alert(data["error"]);
+        }
         setData(data);
         setupPlotly(data, setData);
       });
@@ -29,6 +37,7 @@ export default function Home() {
         onFormSubmit={onFormSubmit}
         input={input}
         setInput={setInput}
+        setModel={setModel}
       />
       <div className="col-span-7">
         <div id="plotly" className="h-[95%]"></div>

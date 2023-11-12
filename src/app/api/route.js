@@ -1,10 +1,18 @@
 import { PCA } from "ml-pca";
 import { getEmbedding } from "./embedding";
 
+const ALLOWED_MODELS = ["random", "openai"];
+
 export async function POST(request) {
   const res = await request.json();
   const model = res["model"] || "random";
   const inputs = res["input"].split("\n").filter((x) => x.trim() !== "");
+
+  if (!ALLOWED_MODELS.includes(model)) {
+    return Response.json({
+      error: `Invalid model. Only ${ALLOWED_MODELS.join(",")} are allowed.`,
+    });
+  }
 
   // get embedding for each line in input
   const dataset = [];
