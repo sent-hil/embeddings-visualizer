@@ -7,23 +7,29 @@ import { setupPlotly } from "./chart";
 
 export default function Home() {
   const [data, setData] = useState([]);
-  const [flyOutOpen, setFlyOutOpen] = useState(false);
+  const [flyOutOpen, setFlyOutOpen] = useState(true);
+  const [input, setInput] = useState("");
 
-  useEffect(() => {
-    fetch("/api", {
-      method: "POST",
-      body: JSON.stringify(data),
-    })
+  const onFormSubmit = (e) => {
+    e.preventDefault();
+
+    fetch("/api", { method: "POST", body: JSON.stringify({ input: input }) })
       .then((res) => res.json())
       .then((data) => {
         setData(data);
         setupPlotly(data, setData);
       });
-  }, []);
+  };
 
   return (
     <main className="grid h-screen grid-cols-10">
-      <FlyOut flyOutOpen={flyOutOpen} setFlyOutOpen={setFlyOutOpen} />
+      <FlyOut
+        flyOutOpen={flyOutOpen}
+        setFlyOutOpen={setFlyOutOpen}
+        onFormSubmit={onFormSubmit}
+        input={input}
+        setInput={setInput}
+      />
       <div className="col-span-7">
         <div id="plotly" className="h-[95%]"></div>
         <div id="hover_info"></div>
