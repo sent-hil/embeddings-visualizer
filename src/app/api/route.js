@@ -14,6 +14,10 @@ export async function POST(request) {
     });
   }
 
+  if (inputs.length <= 1) {
+    return Response.json({ error: "`inputs` must have size of at least 2" });
+  }
+
   // get embedding for each line in input
   const dataset = [];
   for (let i = 0; i < inputs.length; i++) {
@@ -24,11 +28,11 @@ export async function POST(request) {
   // reduce dimensionality
   const embeddingsOnly = dataset.map((d) => d.embedding);
   const pca = new PCA(embeddingsOnly);
-  const smaller = pca.predict(embeddingsOnly, { nComponents: 1 }).to1DArray();
+  const smaller = pca.predict(embeddingsOnly, { nComponents: 2 }).to2DArray();
 
   return Response.json(
-    smaller.map((value, i) => {
-      return { x: i, y: value, text: dataset[i].text };
+    smaller.map((values, i) => {
+      return { i, i, x: values[0].toPrecision(3), y: values[1].toPrecision(3), text: dataset[i].text };
     })
   );
 }

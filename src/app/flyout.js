@@ -97,7 +97,7 @@ const FlyOut = ({
                                 htmlFor="model"
                                 className="block text-sm font-medium leading-6 text-gray-900"
                               >
-                                Country
+                                Model
                               </label>
                               <div className="w-full mt-2">
                                 <select

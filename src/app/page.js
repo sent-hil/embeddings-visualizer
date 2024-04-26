@@ -10,14 +10,14 @@ export default function Home() {
   const [flyOutOpen, setFlyOutOpen] = useState(true);
 
   const [input, setInput] = useState("");
-  const [model, setModel] = useState("");
+  const [model, setModel] = useState("openai");
 
   const onFormSubmit = (e) => {
     e.preventDefault();
 
     fetch("/api", {
       method: "POST",
-      body: JSON.stringify({ input: input, model: model }),
+      body: JSON.stringify({ input, model }),
     })
       .then((res) => res.json())
       .then((data) => {
@@ -57,9 +57,9 @@ export default function Home() {
         <ul className="pt-2 mb-10" id="data_list">
           {data.map((d) => (
             <li
-              className="flex pt-1 overflow-auto transition-colors rounded-lg whitespace-nowrap"
+              className="flex pt-1 overflow-auto whitespace-normal transition-colors rounded-lg"
               name={d.x}
-              key={d.x}
+              key={d.i}
             >
               [{d.x}, {d.y}] - {d.text}
             </li>

@@ -3,7 +3,11 @@ export function setupPlotly(originalData, setData) {
 
   const xs = originalData.map((d) => d.x);
   const ys = originalData.map((d) => d.y);
+  const ts = originalData.map((d) => d.text);
+
   const colors = originalData.map((d) => d.color || "#000");
+
+  // find item in originalData where x matches the name attribute of the list item
 
   if (typeof window.Plotly === "undefined") {
     return;
@@ -16,6 +20,7 @@ export function setupPlotly(originalData, setData) {
       {
         x: xs,
         y: ys,
+        text: ts,
         type: "scatter",
         mode: "markers",
         marker: { size: 12, colors: colors },
@@ -26,10 +31,10 @@ export function setupPlotly(originalData, setData) {
 
   // On click, scroll to the item in the list and highlight it.
   myPlot.on("plotly_click", (d) => {
-    const i = d.points[0].pointNumber,
-      item = ulRef.children.namedItem(i.toString());
+    const item = ulRef.children.namedItem(d.points[0].x);
 
     if (!item) {
+      console.log("Item not found", d.points[0])
       return;
     }
 
@@ -57,10 +62,11 @@ export function setupPlotly(originalData, setData) {
 
   // Show point under hover.
   myPlot.on("plotly_hover", (d) => {
-    const p = d.points[0];
-    const infoText = [p.x, p.y, originalData[p.x].text].join(", ");
+    const { text } = originalData.find(x => x.x == d.points[0].x)
 
-    document.getElementById("hover_info").innerHTML = `<p>${infoText}</p>`;
+    if (text) {
+      document.getElementById("hover_info").innerHTML = `<p class="pl-2">${text}</p>`;
+    }
   });
 
   // Remove hover info once the mouse leaves the plot.
