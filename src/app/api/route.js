@@ -1,11 +1,11 @@
 import { PCA } from "ml-pca";
 import { getEmbedding } from "./embedding";
 
-const ALLOWED_MODELS = ["random", "openai"];
+const ALLOWED_MODELS = ["openai", "cohere"];
 
 export async function POST(request) {
   const res = await request.json();
-  const model = res["model"] || "random";
+  const model = res["model"];
   const inputs = res["input"].split("\n").filter((x) => x.trim() !== "");
 
   if (!ALLOWED_MODELS.includes(model)) {

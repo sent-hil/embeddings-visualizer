@@ -38,6 +38,7 @@ export default function Home() {
         input={input}
         setInput={setInput}
         setModel={setModel}
+        model={model}
       />
       <div className="col-span-7">
         <div id="plotly" className="h-[95%]"></div>

@@ -11,6 +11,7 @@
   "dependencies": {
     "@headlessui/react": "^1.7.17",
     "@heroicons/react": "^2.0.18",
+    "cohere-ai": "^7.9.5",
     "ml-dataset-iris": "^1.2.1",
     "ml-pca": "^4.1.1",
     "next": "14.0.0",
