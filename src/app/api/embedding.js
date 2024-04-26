@@ -1,42 +1,45 @@
 import OpenAI from "openai";
-import { CohereClient, Cohere, CohereError } from "cohere-ai";
+import { CohereClient, Cohere } from "cohere-ai";
 
-export async function getEmbedding(model, input) {
-  switch (model) {
-    case "cohere":
-      return await getCohereEmbedding(input);
+export async function getEmbedding(provider, model, inputs) {
+  switch (provider) {
     case "openai":
-      return await getOpenAiEmbedding(input);
+      return await getOpenAiEmbedding(model, inputs);
+    case "cohere":
+      return await getCohereEmbedding(model, inputs);
   }
 }
 
-async function getOpenAiEmbedding(input) {
-  const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-  const response = await openai.embeddings.create({
-    input,
-    model: "text-embedding-ada-002",
-  });
+async function getOpenAiEmbedding(model, inputs) {
+  const openai = new OpenAI({apiKey: process.env.OPENAI_API_KEY});
 
-  return response["data"][0]["embedding"];
+  const dataset = [];
+  for (let i = 0; i < inputs.length; i++) {
+    const response = await openai.embeddings.create({
+      input: inputs[i],
+      model
+    });
+    dataset.push({embedding: response["data"][0]["embedding"], text: inputs[i]});
+  }
+
+  return dataset
 }
 
-async function getCohereEmbedding(input) {
-  const cohere = new CohereClient({token: "TAecikvGNXoNmycwws9CbysldT8tu5sNLBGh8BKp"})
+async function getCohereEmbedding(model, inputs) {
+  const cohere = new CohereClient({token: process.env.COHERE_API_KEY});
 
-  try {
-    let response = await cohere.embed({
-      texts: [input],
-      model: "embed-english-v3.0",
-      inputType: Cohere.EmbedInputType.SearchDocument,
-      embeddingTypes: [Cohere.EmbeddingType.Float],
-    })
+  const response = await cohere.embed({
+    texts: inputs,
+    model,
+    inputType: Cohere.EmbedInputType.SearchDocument,
+    embeddingTypes: [Cohere.EmbeddingType.Float],
+  })
+  const { embeddings, texts } = response
 
-    return response.embeddings.float[0]
-  } catch (err) {
-    if (err instanceof CohereError) {
-      return err.body
-    } else {
-      return err
-    }
+  const dataset = []
+  for (let i = 0; i < inputs.length; i++) {
+    dataset.push({embedding: embeddings.float[i], text: texts[i]});
   }
+
+  return dataset
 }

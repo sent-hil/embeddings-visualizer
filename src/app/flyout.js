@@ -8,8 +8,8 @@ const FlyOut = ({
   onFormSubmit,
   input,
   setInput,
-  model,
-  setModel,
+  provider,
+  setProvider,
 }) => {
   return (
     <Transition.Root show={flyOutOpen} as={Fragment}>
@@ -95,19 +95,19 @@ const FlyOut = ({
                             </div>
                             <div className="w-full">
                               <label
-                                htmlFor="model"
+                                htmlFor="provider"
                                 className="block text-sm font-medium leading-6 text-gray-900"
                               >
-                                Model
+                                Provider
                               </label>
                               <div className="w-full mt-2">
                                 <select
-                                  id="model"
-                                  name="model"
-                                  autoComplete="model-name"
+                                  id="provider"
+                                  name="provider"
+                                  autoComplete="provider-name"
                                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                  value={model}
-                                  onChange={(e) => setModel(e.target.value)}
+                                  value={provider}
+                                  onChange={(e) => setProvider(e.target.value)}
                                 >
                                   <option value="openai">OpenAI</option>
                                   <option value="cohere">Cohere</option>

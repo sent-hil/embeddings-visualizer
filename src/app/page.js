@@ -10,14 +10,14 @@ export default function Home() {
   const [flyOutOpen, setFlyOutOpen] = useState(true);
 
   const [input, setInput] = useState("");
-  const [model, setModel] = useState("openai");
+  const [provider, setProvider] = useState("openai");
 
   const onFormSubmit = (e) => {
     e.preventDefault();
 
     fetch("/api", {
       method: "POST",
-      body: JSON.stringify({ input, model }),
+      body: JSON.stringify({ input, provider }),
     })
       .then((res) => res.json())
       .then((data) => {
@@ -37,8 +37,8 @@ export default function Home() {
         onFormSubmit={onFormSubmit}
         input={input}
         setInput={setInput}
-        setModel={setModel}
-        model={model}
+        setProvider={setProvider}
+        provider={provider}
       />
       <div className="col-span-7">
         <div id="plotly" className="h-[95%]"></div>
