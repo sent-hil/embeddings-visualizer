@@ -5,7 +5,8 @@ import Script from "next/script";
 import FlyOut from "./flyout";
 import Spinner from "./spinner";
 import DefaultData from "./default_data";
-import { setupPlotly } from "./chart";
+import { setupPlotly, PlotlyElementId, DefaultPointColor } from "./chart";
+import Hash from "./hash";
 
 export default function Home() {
   const [data, setData] = useState(DefaultData.data);
@@ -14,10 +15,34 @@ export default function Home() {
   const [input, setInput] = useState(DefaultData.input.join("\n"));
   const [provider, setProvider] = useState("OpenAI");
   const [model, setModel] = useState("text-embedding-ada-002");
+  const [prevTimeout, setPrevTimeout] = useState(null);
 
   useEffect(() => {
     setupPlotly(data, setData);
   }, [data])
+
+  const pointInGraph = (e) => {
+    e.stopPropagation();
+
+    const {x, y} = e.target.dataset
+    if (x === undefined || y === undefined) {
+      console.log("No x/y data found")
+    }
+
+    const restyle = (newColor) => {
+      let colors = Array(10).fill(DefaultPointColor)
+      const dataIndex = data.findIndex(d => d.x == x && d.y == y)
+      colors[dataIndex] = newColor
+      const update = {'marker.color': [colors]};
+      Plotly.restyle(PlotlyElementId, update);
+    }
+
+    if (prevTimeout) { clearTimeout(prevTimeout) };
+    restyle("red")
+    setPrevTimeout(
+      setTimeout(() => { restyle(DefaultPointColor) }, 3000)
+    )
+  }
 
   return (
     <main className="grid h-screen grid-cols-10">
@@ -63,10 +88,18 @@ export default function Home() {
           {data.map((d) => (
             <li
               className="flex pt-1 overflow-auto whitespace-normal transition-colors rounded-lg"
-              name={d.x}
+              name={Hash(d.text)}
               key={d.i}
             >
-              [{d.x}, {d.y}] - {d.text}
+              <div className="flex items-center space-x-1">
+                <p>[{d.x},{d.y}]</p>
+                <div className="hover:cursor-pointer">
+                  <svg onClick={pointInGraph} data-x={d.x} data-y={d.y} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                    <path onClick={pointInGraph} data-x={d.x} data-y={d.y} stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />
+                  </svg>
+                </div>
+                <p>- {d.text}</p>
+              </div>
             </li>
           ))}
         </ul>

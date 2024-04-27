@@ -1,3 +1,8 @@
+import Hash from "./hash";
+
+export const PlotlyElementId = "plotly"
+export const DefaultPointColor = "#1f77b4"
+
 export function setupPlotly(originalData, setData) {
   const ulRef = document.getElementById("data_list");
 
@@ -5,7 +10,7 @@ export function setupPlotly(originalData, setData) {
   const ys = originalData.map((d) => d.y);
   const ts = originalData.map((d) => d.text);
 
-  const colors = originalData.map((d) => d.color || "#000");
+  const colors = originalData.map((d) => d.color || DefaultPointColor)
 
   // find item in originalData where x matches the name attribute of the list item
 
@@ -13,7 +18,7 @@ export function setupPlotly(originalData, setData) {
     return;
   }
 
-  const myPlot = document.getElementById("plotly");
+  const myPlot = document.getElementById(PlotlyElementId)
 
   Plotly.newPlot(myPlot, {
     data: [
@@ -31,7 +36,8 @@ export function setupPlotly(originalData, setData) {
 
   // On click, scroll to the item in the list and highlight it.
   myPlot.on("plotly_click", (d) => {
-    const item = ulRef.children.namedItem(d.points[0].x);
+    // can't use x/y point, since plotly truncates 0 suffixes
+    const item = ulRef.children.namedItem(Hash(d.points[0].text));
 
     if (!item) {
       console.log("Item not found", d.points[0])
