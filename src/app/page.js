@@ -10,14 +10,15 @@ export default function Home() {
   const [flyOutOpen, setFlyOutOpen] = useState(true);
 
   const [input, setInput] = useState("");
-  const [provider, setProvider] = useState("openai");
+  const [provider, setProvider] = useState("OpenAI");
+  const [model, setModel] = useState("text-embedding-ada-002");
 
   const onFormSubmit = (e) => {
     e.preventDefault();
 
     fetch("/api", {
       method: "POST",
-      body: JSON.stringify({ input, provider }),
+      body: JSON.stringify({ input, model, provider }),
     })
       .then((res) => res.json())
       .then((data) => {
@@ -37,8 +38,10 @@ export default function Home() {
         onFormSubmit={onFormSubmit}
         input={input}
         setInput={setInput}
-        setProvider={setProvider}
         provider={provider}
+        setProvider={setProvider}
+        model={model}
+        setModel={setModel}
       />
       <div className="col-span-7">
         <div id="plotly" className="h-[95%]"></div>
@@ -55,6 +58,14 @@ export default function Home() {
             Click to Edit
           </button>
         </div>
+        {
+          input.length > 0 && (
+            <div className="pt-2">
+              <p className="text-sm"><span class="font-semibold">Provider: </span>{provider}</p>
+              <p className="text-sm"><span class="font-semibold">Model: </span>{model}</p>
+            </div>
+          )
+        }
         <ul className="pt-2 mb-10" id="data_list">
           {data.map((d) => (
             <li

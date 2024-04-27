@@ -3,13 +3,15 @@ import { getEmbedding } from "./embedding";
 
 const OPENAI = "openai";
 const COHERE = "cohere";
-const ALLOWED_PROVIDERS = [OPENAI, COHERE];
+const VOYAGE = "voyage";
+
+const ALLOWED_PROVIDERS = [OPENAI, COHERE, VOYAGE];
 
 export async function POST(request) {
   const res = await request.json();
 
-  const provider = res["provider"];
-  const model = provider === OPENAI ? "text-embedding-3-small" : "embed-english-v3.0"
+  const provider = res["provider"].toLowerCase();
+  const model = res["model"];
   const inputs = res["input"].split("\n").filter((x) => x.trim() !== "");
 
   if (!ALLOWED_PROVIDERS.includes(provider)) {
