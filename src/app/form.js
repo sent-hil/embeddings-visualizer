@@ -2,10 +2,18 @@ import { useState } from "react";
 import FormOptions from "./form_options";
 import { setupPlotly } from "./chart";
 
-const Form = ({setFlyOutOpen, setData, setShowSpinner, input, setInput}) => {
+const Form = ({
+  setFlyOutOpen,
+  setData,
+  setShowSpinner,
+  input,
+  setInput,
+  provider,
+  setProvider,
+  model,
+  setModel
+}) => {
   const [providerCount, setProviderCount] = useState(1);
-  const [provider, setProvider] = useState("OpenAI");
-  const [model, setModel] = useState("text-embedding-ada-002");
 
   const onFormSubmit = (e) => {
     e.preventDefault();

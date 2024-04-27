@@ -1,15 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Script from "next/script";
 import FlyOut from "./flyout";
 import Spinner from "./spinner";
+import DefaultData from "./default_data";
+import { setupPlotly } from "./chart";
 
 export default function Home() {
-  const [data, setData] = useState([]);
-  const [flyOutOpen, setFlyOutOpen] = useState(true);
+  const [data, setData] = useState(DefaultData.data);
+  const [flyOutOpen, setFlyOutOpen] = useState(false);
   const [showSpinner, setShowSpinner] = useState(false);
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState(DefaultData.input.join("\n"));
+  const [provider, setProvider] = useState("OpenAI");
+  const [model, setModel] = useState("text-embedding-ada-002");
+
+  useEffect(() => {
+    setupPlotly(data, setData);
+  }, [data])
 
   return (
     <main className="grid h-screen grid-cols-10">
@@ -20,6 +28,10 @@ export default function Home() {
         setShowSpinner={setShowSpinner}
         input={input}
         setInput={setInput}
+        provider={provider}
+        setProvider={setProvider}
+        model={model}
+        setModel={setModel}
       />
       <div className="col-span-7">
         <div id="plotly" className="h-[95%]"></div>

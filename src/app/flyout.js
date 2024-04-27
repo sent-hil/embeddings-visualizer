@@ -9,7 +9,11 @@ const FlyOut = ({
   setData,
   setShowSpinner,
   input,
-  setInput
+  setInput,
+  provider,
+  setProvider,
+  model,
+  setModel
 }) => {
   return (
     <Transition.Root show={flyOutOpen} as={Fragment}>
@@ -73,6 +77,10 @@ const FlyOut = ({
                         setShowSpinner={setShowSpinner}
                         input={input}
                         setInput={setInput}
+                        provider={provider}
+                        setProvider={setProvider}
+                        model={model}
+                        setModel={setModel}
                       />
                     </div>
                   </div>
