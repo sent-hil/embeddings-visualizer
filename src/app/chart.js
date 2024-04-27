@@ -12,8 +12,6 @@ export function setupPlotly(originalData, setData) {
 
   const colors = originalData.map((d) => d.color || DefaultPointColor)
 
-  // find item in originalData where x matches the name attribute of the list item
-
   if (typeof window.Plotly === "undefined") {
     return;
   }
@@ -55,14 +53,14 @@ export function setupPlotly(originalData, setData) {
   // Update the list when the chart is zoomed.
   myPlot.on("plotly_relayout", (d) => {
     if (d["xaxis.range[0]"] === undefined) {
-      setData(originalData);
+      //setData(originalData);
     } else {
       // Show only data points that are within the zoomed range.
       const x1 = Math.ceil(d["xaxis.range[0]"]);
       const x2 = Math.ceil(d["xaxis.range[1]"]);
       const y2 = d["yaxis.range[1]"];
 
-      setData(originalData.slice(x1, x2).filter((d) => d.y <= y2));
+      // setData(originalData.slice(x1, x2).filter((d) => d.y <= y2));
     }
   });
 
