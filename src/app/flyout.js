@@ -6,13 +6,10 @@ import Form from "./form";
 const FlyOut = ({
   flyOutOpen,
   setFlyOutOpen,
-  onFormSubmit,
+  setData,
+  setShowSpinner,
   input,
-  setInput,
-  provider,
-  setProvider,
-  model,
-  setModel,
+  setInput
 }) => {
   return (
     <Transition.Root show={flyOutOpen} as={Fragment}>
@@ -41,7 +38,7 @@ const FlyOut = ({
                 leaveFrom="translate-x-0"
                 leaveTo="translate-x-full"
               >
-                <Dialog.Panel className="relative w-screen max-w-sm pointer-events-auto">
+                <Dialog.Panel className="relative w-screen max-w-lg pointer-events-auto">
                   <Transition.Child
                     as={Fragment}
                     enter="ease-in-out duration-500"
@@ -71,14 +68,11 @@ const FlyOut = ({
                     </div>
                     <div className="relative flex-1 px-4 sm:px-6">
                       <Form
-                        onFormSubmit={onFormSubmit}
-                        input={input}
-                        provider={provider}
-                        model={model}
-                        setInput={setInput}
-                        setProvider={setProvider}
-                        setModel={setModel}
                         setFlyOutOpen={setFlyOutOpen}
+                        setData={setData}
+                        setShowSpinner={setShowSpinner}
+                        input={input}
+                        setInput={setInput}
                       />
                     </div>
                   </div>

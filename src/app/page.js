@@ -4,50 +4,22 @@ import { useState } from "react";
 import Script from "next/script";
 import FlyOut from "./flyout";
 import Spinner from "./spinner";
-import { setupPlotly } from "./chart";
 
 export default function Home() {
   const [data, setData] = useState([]);
   const [flyOutOpen, setFlyOutOpen] = useState(true);
-
-  const [input, setInput] = useState("");
-  const [provider, setProvider] = useState("OpenAI");
-  const [model, setModel] = useState("text-embedding-ada-002");
-
   const [showSpinner, setShowSpinner] = useState(false);
-
-  const onFormSubmit = (e) => {
-    e.preventDefault();
-
-    setShowSpinner(true);
-
-    fetch("/api", {
-      method: "POST",
-      body: JSON.stringify({ input, model, provider }),
-    })
-    .then((res) => res.json())
-    .then((data) => {
-      if (data["error"]) {
-        return alert(data["error"]);
-      }
-      setData(data);
-      setupPlotly(data, setData);
-    })
-    .finally(() => { setShowSpinner(false) })
-  };
+  const [input, setInput] = useState("");
 
   return (
     <main className="grid h-screen grid-cols-10">
       <FlyOut
         flyOutOpen={flyOutOpen}
         setFlyOutOpen={setFlyOutOpen}
-        onFormSubmit={onFormSubmit}
+        setData={setData}
+        setShowSpinner={setShowSpinner}
         input={input}
         setInput={setInput}
-        provider={provider}
-        setProvider={setProvider}
-        model={model}
-        setModel={setModel}
       />
       <div className="col-span-7">
         <div id="plotly" className="h-[95%]"></div>
@@ -55,7 +27,7 @@ export default function Home() {
       </div>
       <div className="h-screen col-span-3 px-4 overflow-y-scroll bg-white">
         <div className="flex items-center justify-between pt-6 align-middle">
-          <div class="flex items-center align-middle">
+          <div className="flex items-center align-middle">
             {" "}
             <h1 className="text-xl font-bold">Data</h1>&nbsp;-&nbsp;
             <button
@@ -70,8 +42,8 @@ export default function Home() {
         {
           input.length > 0 && (
             <div className="pt-2">
-              <p className="text-sm"><span class="font-semibold">Provider: </span>{provider}</p>
-              <p className="text-sm"><span class="font-semibold">Model: </span>{model}</p>
+              <p className="text-sm"><span className="font-semibold">Provider: </span>{provider}</p>
+              <p className="text-sm"><span className="font-semibold">Model: </span>{model}</p>
             </div>
           )
         }
