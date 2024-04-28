@@ -45,7 +45,7 @@ export default function Home() {
   }
 
   return (
-    <main className="grid h-screen grid-cols-10">
+    <main className="block h-screen md:grid md:grid-cols-10">
       <FlyOut
         flyOutOpen={flyOutOpen}
         setFlyOutOpen={setFlyOutOpen}
@@ -58,7 +58,11 @@ export default function Home() {
         model={model}
         setModel={setModel}
       />
-      <div className="col-span-7">
+      <div className="col-span-7 px-4 pt-6 bg-white">
+        <div class="flex flex-col items-center text-center">
+          <h1 className="text-2xl font-semibold">Embeddings Visualizer</h1>
+          <p>A Way to visualize embeddings returned by various AI providers.</p>
+        </div>
         <div id="plotly" className="h-[95%]"></div>
         <div id="hover_info"></div>
       </div>

@@ -29,7 +29,7 @@ export function setupPlotly(originalData, setData) {
         marker: { size: 12, colors: colors },
       },
     ],
-    layout: { title: "Embeddings Visualizer" },
+    layout: {margin: {t: 20}},
   });
 
   // On click, scroll to the item in the list and highlight it.
