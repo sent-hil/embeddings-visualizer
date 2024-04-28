@@ -60,7 +60,7 @@ const Form = ({
               rows={4}
               value={input}
               onInput={(e) => setInput(e.currentTarget.textContent)}
-              className="block w-full min-h-fit rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 whitespace-pre"
+              className="overflow-auto break-words block w-full min-h-fit rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 whitespace-pre"
             >
               {input}
               </div>
