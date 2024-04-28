@@ -16,13 +16,15 @@ export async function getEmbedding(provider, model, inputs) {
 async function getOpenAiEmbedding(model, inputs) {
   const openai = new OpenAI({apiKey: process.env.OPENAI_API_KEY});
 
-  const dataset = [];
-  for (let i = 0; i < inputs.length; i++) {
-    const response = await openai.embeddings.create({
-      input: inputs[i],
-      model
-    });
-    dataset.push({embedding: response["data"][0]["embedding"], text: inputs[i]});
+  const response = await openai.embeddings.create({
+    input: inputs,
+    model
+  })
+
+  const dataset = []
+  for (let i = 0; i < response.data.length; i++) {
+    const embedding = response.data[i].embedding
+    dataset.push({embedding, text: inputs[i]});
   }
 
   return dataset
@@ -40,7 +42,7 @@ async function getCohereEmbedding(model, inputs) {
   const { embeddings, texts } = response
 
   const dataset = []
-  for (let i = 0; i < inputs.length; i++) {
+  for (let i = 0; i < embeddings.float.length; i++) {
     dataset.push({embedding: embeddings.float[i], text: texts[i]});
   }
 
