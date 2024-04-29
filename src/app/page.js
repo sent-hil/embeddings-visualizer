@@ -59,7 +59,7 @@ export default function Home() {
         setModel={setModel}
       />
       <div className="col-span-7 px-4 pt-6 bg-white">
-        <div class="flex flex-col items-center text-center">
+        <div className="flex flex-col items-center text-center">
           <h1 className="text-2xl font-semibold">Embeddings Visualizer</h1>
           <p>A Way to visualize embeddings returned by various AI providers.</p>
         </div>
