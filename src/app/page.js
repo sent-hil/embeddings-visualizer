@@ -24,7 +24,7 @@ export default function Home() {
   const pointInGraph = (e) => {
     e.stopPropagation();
 
-    const {x, y} = e.target.dataset
+    const { x, y } = e.target.dataset
     if (x === undefined || y === undefined) {
       console.log("No x/y data found")
     }
@@ -33,7 +33,7 @@ export default function Home() {
       let colors = Array(10).fill(DefaultPointColor)
       const dataIndex = data.findIndex(d => d.x == x && d.y == y)
       colors[dataIndex] = newColor
-      const update = {'marker.color': [colors]};
+      const update = { 'marker.color': [colors] };
       Plotly.restyle(PlotlyElementId, update);
     }
 
@@ -63,7 +63,7 @@ export default function Home() {
           <h1 className="text-2xl font-semibold">Embeddings Visualizer</h1>
           <p>A Way to visualize embeddings returned by various AI providers.</p>
         </div>
-        <div id="plotly" className="h-[87%]"></div>
+        <div id="plotly"></div>
         <div id="hover_info"></div>
       </div>
       <div className="min-h-screen col-span-3 px-4 overflow-y-scroll bg-white">
