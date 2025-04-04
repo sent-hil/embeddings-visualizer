@@ -1,5 +1,9 @@
 # Embeddings Visualizer
 
+Visualize embeddings from OpenAI, Cohere or Voyage for given input a 2D space using [Principal Component Analysis](https://en.wikipedia.org/wiki/Principal_component_analysis). While this helps you visualize the inputs, I wouldn't put too much stock into proximity of results.
+
+![screenshot](screenshot.png)
+
 ## Getting Started
 
 Development server:
